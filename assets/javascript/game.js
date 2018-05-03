@@ -68,7 +68,7 @@ var questions = [
 //      TIMER FUNCTIONALITY
 // ###############################################
 
-var number = 30;
+var timerCount = 5;
 var interval;
 var isRunning = false; 
 
@@ -76,7 +76,7 @@ $("#stop").on("click", stop);
 $("#resume").on("click", run);
 
 function run() {
-    if (!isRunning && (number > 0)) {
+    if (!isRunning && (timerCount > 0)) {
         clearInterval(interval);
         interval = setInterval(decrement, 1000);
         isRunning = true;
@@ -84,11 +84,12 @@ function run() {
 }
 
 function decrement() {
-    number--;
-    $("#timer").text(number);
-    if (number === 0) {
+    timerCount--;
+    $("#timer").text(timerCount);
+    if (timerCount === 0) {
         stop();
-        alert("Time's up!");
+        // console.log(questionCounter);
+        timesUpDisplay(questionCounter);
     }
 }
 
@@ -98,6 +99,7 @@ function stop() {
         isRunning = false;
     }
 }
+
 
 // run();
 
@@ -110,7 +112,6 @@ var choiceHolder = 0;
 function displayQuestion (questionCounter) {
     $("#questionsContainer").empty();
     $("#choicesContainer").empty();
-    console.log(questionCounter);
     var currentQuestion = questions[questionCounter];
     $("#questionsContainer").text(currentQuestion.question);
     for (var i = 0; i < currentQuestion.choices.length; i++) {
@@ -118,6 +119,7 @@ function displayQuestion (questionCounter) {
         choice.attr("data-choicevalue", i).attr("class", "choices").text(currentQuestion.choices[i]);
         $("#choicesContainer").append(choice);
     }
+    run();
 }
 
 // ###############################################
@@ -132,16 +134,11 @@ $(document).on("click", ".choices", function() {
     
     //Checks user selection correctness.
     if (choiceValue === questions[questionCounter].answer) {        
-            // questionCounter++;
-            // displayQuestion(questionCounter);
+            stop();
             correctDisplay(choiceValue);
       
     } else {
-            // alert("Incorrect!");
-            // $("#questionsContainer").text("");
-            // $("#choicesContainer").empty();
-            // questionCounter++;
-            // displayQuestion(questionCounter);
+            stop();
             incorrectDisplay(choiceValue);
 
     }
@@ -151,6 +148,7 @@ $(document).on("click", ".choices", function() {
     // ###############################################
 
     function correctDisplay(choiceValue){
+        // console.log(questionCounter);
         $("#choicesContainer").empty();
         var image = $("<img>");
         image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
@@ -164,8 +162,7 @@ $(document).on("click", ".choices", function() {
         var goodJob = $("<img>");
         goodJob.attr("src", "assets/images/goodjob.png").attr("class", "img-fluid goodJob");
         $(".jumbotron").append(goodJob);
-        console.log(questionCounter);
-        questionCounter++
+        questionCounter++;
         nextQuestion(questionCounter);
     }
 
@@ -174,6 +171,7 @@ $(document).on("click", ".choices", function() {
     // ###############################################
 
     function incorrectDisplay(choiceValue){
+        // console.log(questionCounter);
         $("#choicesContainer").empty();
         var image = $("<img>");
         image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
@@ -187,27 +185,38 @@ $(document).on("click", ".choices", function() {
         var xout = $("<img>");
         xout.attr("src", "assets/images/xout.png").attr("class", "img-fluid xout");
         $(".jumbotron").append(xout);
-        questionCounter++
+        questionCounter++;
         nextQuestion(questionCounter);
     }
-
-    function nextQuestion(questionCounter) {
-        if (questionCounter === questions.length - 1) {
-            finishedDisplay();
-        } else { setTimeout(function(){
-            $(".goodJob").remove();
-            displayQuestion(questionCounter);
-        }, 3000);
-      }
-    }
 });
+
+function nextQuestion(questionCounter) {
+    // console.log(questionCounter);
+    if (questionCounter === questions.length - 1) {
+        finishedDisplay();
+    } else { setTimeout(function(){
+        timerCount = 5;
+        console.log("In Here");
+        $("#timer").text(5);
+        $(".goodJob").remove();
+        $(".xout").remove();
+        $(".timesUp").remove();
+        console.log(questionCounter);
+        questionCounter++;
+        displayQuestion(questionCounter);
+    }, 3000);
+  }
+}
 
 // ###############################################
 //      TIMES UP DISPLAY
 // ###############################################
 
-function timesUpDisplay(choiceValue){
+function timesUpDisplay(questionCounter){
 
+    console.log(questionCounter);
+    nextQuestion(questionCounter);
+    
     //CLEAR CONTAINERS
     $("#questionsContainer").text(questions[questionCounter].question);
     $("#choicesContainer").empty();
@@ -216,7 +225,7 @@ function timesUpDisplay(choiceValue){
     var image = $("<img>");
     image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
     var timesUpReveal = $("<div>");
-    timesUpReveal.attr("class", "timesUpReveal").text("The correct answer was: " + questions[questionCounter].choices[choiceValue]);
+    timesUpReveal.attr("class", "timesUpReveal").text("The correct answer was: " + questions[questionCounter].choices[questions[questionCounter].answer]);
     $("#choicesContainer").append(image, timesUpReveal);
 
     //TIMES UP STICKER
@@ -270,6 +279,8 @@ function finishedDisplay(choiceValue){
 // ###############################################
 
 function startDisplay(){
+    $("#timer").text(5);
+
     //CLEAR CONTAINERS
     $("#choicesContainer").empty();
 
@@ -287,3 +298,4 @@ $(document).on("click", ".startButton", function(){
     displayQuestion(questionCounter);
     $(".timer-div").removeClass("isHidden");
 })
+
