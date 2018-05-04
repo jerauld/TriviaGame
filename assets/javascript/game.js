@@ -1,22 +1,20 @@
-// ###############################################
-//      TRIVIA QUESTIONS ARRAY
-// ###############################################
+// Trvia Questions Array
 
 var questions = [
     {
-        question: "Who is the only person to beome US Vice President and then President without being elected to either office?",
+        question: "Who is the only person to become US Vice President and then President without being elected to either office?",
         choices: ["Gerald Ford", "William Henry Harrison", "Jimmy Carter", "Lyndon B Johnson"],
         answer: 0,
         image: "assets/images/ford.jpg"
     },
     {
-        question: "What planet would you weight the most on?",
+        question: "What planet would you weigh the most on?",
         choices: ["Mercury", "Jupiter", "Saturn", "Venus"],
         answer: 1,
         image: "assets/images/jupiter.jpg"
     },
     {
-        question: "Also called the brain case, what is the name of the top part  ofthe skull which encloses the brain?",
+        question: "Also called the \"brain case\", what is the name of the top part of the skull which encloses the brain?",
         choices: ["Cranium", "Mandible", "Femur", "Temporal"],
         answer: 0,
         image: "assets/images/cranium.png"
@@ -46,7 +44,7 @@ var questions = [
         image: "assets/images/colonel.png"
     },
     {
-        question: "What is the maximum of Thursdays that can occur in a given calendar year?",
+        question: "What is the maximum number of Thursdays that can occur in a given calendar year?",
         choices: ["53", "55", "52", "54"],
         answer: 0,
         image: "assets/images/thursday.png"
@@ -74,16 +72,7 @@ var corAnswer = 0;
 var incorAnswer = 0;
 var noAnswer = 0; 
 
-
-// ###############################################
-//      TIMER FUNCTIONALITY
-// ###############################################
-
-
-
-// $("#stop").on("click", stop);
-// $("#resume").on("click", run);
-
+// Timer Functionality
 
 function run() {
     if (!isRunning && (timerCount > 0)) {
@@ -109,9 +98,7 @@ function stop() {
     }
 }
 
-// ###############################################
-//      DISPLAY QUESTIONS
-// ###############################################
+//Display Questions
 
 function displayQuestion (questionCounter) {
     $("#questionsContainer").empty();
@@ -126,113 +113,97 @@ function displayQuestion (questionCounter) {
     run();
 }
 
-// ###############################################
-//      CHOICE CLICK FUNCTIONALITY
-// ###############################################
-
-$(document).on("click", ".choices", function() {
-    var choiceValue = $(this).attr("data-choicevalue");
-    choiceValue = parseInt(choiceValue);
-    //Brings click values to the global level.
-    choiceHolder = choiceValue;
-    
-    //Checks user selection correctness.
-    if (choiceValue === questions[questionCounter].answer) {        
-            stop();
-            correctDisplay(choiceValue);
-            // questionCounter++;
-    } else {
-            stop();
-            incorrectDisplay(choiceValue);
-            // questionCounter++;
-    }
-
-    // ###############################################
-    //      CORRECT (ANSWER) DISPLAY
-    // ###############################################
-
-    function correctDisplay(choiceValue){
-        $("#choicesContainer").empty();
-        var image = $("<img>");
-        image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
-        $("#choicesContainer").append(image);
-        var selection = $("<div>");
-        selection.attr("class", "selection").text(questions[questionCounter].choices[choiceValue]);
-        $("#choicesContainer").append(selection);
-        var confirm = $("<div>");
-        confirm.attr("class", "confirm").text("Correct!");
-        $("#choicesContainer").append(confirm);
-        var goodJob = $("<img>");
-        goodJob.attr("src", "assets/images/goodjob.png").attr("class", "img-fluid goodJob");
-        $(".jumbotron").append(goodJob);
-        questionCounter++;
-        corAnswer++;
-        if (questionCounter === questions.length) {
-            setTimeout(finishedDisplay, 3000);
-        } else { 
-            nextQuestion(questionCounter);
-        }
-    }
-
-    // ###############################################
-    //      INCORRECT (ANSWER) DISPLAY
-    // ###############################################
-
-    function incorrectDisplay(choiceValue){
-        $("#choicesContainer").empty();
-        var image = $("<img>");
-        image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
-        $("#choicesContainer").append(image);
-        var selection = $("<div>");
-        selection.attr("class", "wrongSelection").text(questions[questionCounter].choices[choiceValue]);
-        $("#choicesContainer").append(selection);
-        var reveal = $("<div>");
-        reveal.attr("class", "reveal").text(questions[questionCounter].choices[questions[questionCounter].answer]);
-        $("#choicesContainer").append(reveal);
-        var xout = $("<img>");
-        xout.attr("src", "assets/images/xout.png").attr("class", "img-fluid xout");
-        $(".jumbotron").append(xout);
-        questionCounter++;
-        incorAnswer++
-        if (questionCounter === questions.length) {
-            setTimeout(finishedDisplay, 3000);
-        } else { 
-            nextQuestion(questionCounter);
-        }
-    }
-});
-
 function nextQuestion(questionCounter) {
 
-        setTimeout(function(){
-        timerCount = 20;
-        $("#timer").text(20);
-        $(".goodJob").remove();
-        $(".xout").remove();
-        $(".timesUp").remove();
-        displayQuestion(questionCounter);
-    }, 3000);
+    setTimeout(function(){
+    timerCount = 20;
+    $("#timer").text(20);
+    $(".goodJob").remove();
+    $(".xout").remove();
+    $(".timesUp").remove();
+    displayQuestion(questionCounter);
+}, 3000);
 }
 
-// ###############################################
-//      TIMES UP DISPLAY
-// ###############################################
+    //On-Click Functions
+
+    $(document).on("click", ".choices", function() {
+        var choiceValue = $(this).attr("data-choicevalue");
+        choiceValue = parseInt(choiceValue);
+        //Brings click values to the global level.
+        choiceHolder = choiceValue;
+        
+        //Correctness Check
+
+        if (choiceValue === questions[questionCounter].answer) {        
+            stop();
+            correctDisplay(choiceValue);
+        } else {
+            stop();
+            incorrectDisplay(choiceValue);
+        }
+
+        function correctDisplay(choiceValue){
+            $("#choicesContainer").empty();
+            var image = $("<img>");
+                image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
+            $("#choicesContainer").append(image);
+            var selection = $("<div>");
+                selection.attr("class", "selection").text(questions[questionCounter].choices[choiceValue]);
+            $("#choicesContainer").append(selection);
+            var confirm = $("<div>");
+                confirm.attr("class", "confirm").text("Correct!");
+            $("#choicesContainer").append(confirm);
+            var goodJob = $("<img>");
+                goodJob.attr("src", "assets/images/goodjob.png").attr("class", "img-fluid goodJob");
+            $(".jumbotron").append(goodJob);
+            questionCounter++;
+            corAnswer++;
+            if (questionCounter === questions.length) {
+                setTimeout(finishedDisplay, 3000);
+            } else { 
+                nextQuestion(questionCounter);
+            }
+        }
+
+        function incorrectDisplay(choiceValue){
+            $("#choicesContainer").empty();
+            var image = $("<img>");
+                image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
+            $("#choicesContainer").append(image);
+            var selection = $("<div>");
+                selection.attr("class", "wrongSelection").text(questions[questionCounter].choices[choiceValue]);
+            $("#choicesContainer").append(selection);
+            var reveal = $("<div>");
+                reveal.attr("class", "reveal").text(questions[questionCounter].choices[questions[questionCounter].answer]);
+            $("#choicesContainer").append(reveal);
+            var xout = $("<img>");
+                xout.attr("src", "assets/images/xout.png").attr("class", "img-fluid xout");
+            $(".jumbotron").append(xout);
+            questionCounter++;
+            incorAnswer++
+            if (questionCounter === questions.length) {
+                setTimeout(finishedDisplay, 3000);
+            } else { 
+                nextQuestion(questionCounter);
+            }
+        }
+    });
+
+// Time's Up Display
 
 function timesUpDisplay(chicken){   
-    //CLEAR CONTAINERS
+
     $("#questionsContainer").text(questions[chicken].question);
     $("#choicesContainer").empty();
-
-    //TIMES UP IMAGE AND REVEALED ANSWER
     var image = $("<img>");
-    image.attr("src", questions[chicken].image).attr("class", "img-fluid corrincorrect");
+        image.attr("src", questions[chicken].image).attr("class", "img-fluid corrincorrect");
     var timesUpReveal = $("<div>");
-    timesUpReveal.attr("class", "timesUpReveal").text("The correct answer was: " + questions[chicken].choices[questions[chicken].answer]);
+        timesUpReveal.attr("class", "timesUpReveal").text("The correct answer was: " + questions[chicken].choices[questions[chicken].answer]);
     $("#choicesContainer").append(image, timesUpReveal);
 
-    //TIMES UP STICKER
     var timesUp = $("<img>");
-    timesUp.attr("src", "assets/images/timesup.png").attr("class", "img-fluid timesUp");
+        timesUp.attr("src", "assets/images/timesup.png").attr("class", "img-fluid timesUp");
     $(".jumbotron").append(timesUp);
 
     noAnswer++;
@@ -244,43 +215,37 @@ function timesUpDisplay(chicken){
     }
 }
 
-// ###############################################
-//      FINISHED DISPLAY
-// ###############################################
+// Finished
 
 function finishedDisplay(){
-    //CLEAR CONTAINERS
+  
     $("#questionsContainer").empty();
     $("#choicesContainer").empty();
     $(".goodJob").remove();
     $(".xout").remove();
     $(".timesUp").remove();
 
-    //RESULTS HEADER
-    var resultMessage = $("<div>");
-    resultMessage.attr("class", "mx-auto resultMessage").html("All done!<br/>Here's how you did!");
-    $("#questionsContainer").append(resultMessage);
-    
 
-    //RESULTS CONTAINER & PLAY AGAIN BUTTON
+    var resultMessage = $("<div>");
+        resultMessage.attr("class", "mx-auto resultMessage").html("All done!<br/>Here's how you did!");
+    $("#questionsContainer").append(resultMessage);
+
     var results = $("<div>");
-    results.attr("class", "mx-auto results");
+        results.attr("class", "mx-auto results");
     var playAgain = $("<div>");
-    playAgain.attr("class", "mx-auto playAgain").text("Play Again?");
+        playAgain.attr("class", "mx-auto playAgain").text("Play Again?");
     $("#choicesContainer").append(results, playAgain);
 
-    //RESULTS STATS
     var corAnResults = $("<div>");
-    corAnResults.attr("class", "mx-auto corAnResults results-stats").text("Correct Answered: " + corAnswer);
+        corAnResults.attr("class", "mx-auto corAnResults results-stats").text("Correct Answered: " + corAnswer);
     var incorAnResults = $("<div>");
-    incorAnResults.attr("class", "mx-auto incorAnResults results-stats").text("Incorrect Answers: " + incorAnswer);
+        incorAnResults.attr("class", "mx-auto incorAnResults results-stats").text("Incorrect Answers: " + incorAnswer);
     var noAnResults = $("<div>");
-    noAnResults.attr("class", "mx-auto noAnResults results-stats").text("Unanswered: " + noAnswer);
+        noAnResults.attr("class", "mx-auto noAnResults results-stats").text("Unanswered: " + noAnswer);
     $(results).append(corAnResults,incorAnResults,noAnResults);
 
-    //CONFETTI OVERLAY
     var confetti = $("<img>");
-    confetti.attr("src", "assets/images/confetti.png").attr("class", "img-fluid confetti");
+        confetti.attr("src", "assets/images/confetti.png").attr("class", "img-fluid confetti");
     $(".jumbotron").append(confetti);
 }
 
@@ -288,21 +253,17 @@ $(document).on("click", ".playAgain", function(){
     reset();
 });
 
-// ###############################################
-//      START DISPLAY
-// ###############################################
+// Start
 
 function startDisplay(){
     $("#timer").text(20);
 
-    //CLEAR CONTAINERS
     $("#choicesContainer").empty();
 
-    //RESULTS CONTAINER & PLAY AGAIN BUTTON
     var startImage = $("<img>");
-    startImage.attr("src", "assets/images/start.png").attr("class", "img-fluid startImage");
+        startImage.attr("src", "assets/images/start.png").attr("class", "img-fluid startImage");
     var startButton = $("<div>");
-    startButton.attr("class", "mx-auto startButton").text("Start");
+        startButton.attr("class", "mx-auto startButton").text("Start");
     $("#choicesContainer").append(startImage, startButton);
 }
 
@@ -313,9 +274,7 @@ $(document).on("click", ".startButton", function(){
     $(".timer-div").removeClass("isHidden");
 })
 
-// ###############################################
-//      RESET
-// ###############################################
+// Reset
 
 function reset() {
     $("#questionsContainer").empty();
@@ -324,7 +283,6 @@ function reset() {
     questionCounter = 0;
     choiceHolder = 0;    
     timerCount = 20;
-
     corAnswer = 0;
     incorAnswer = 0;
     noAnswer = 0;
