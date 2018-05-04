@@ -82,6 +82,7 @@ header {
     border-radius: 5px; 
     font-size: 1.1em;
     border: 5px solid #eaecef;
+    cursor: pointer;
 
 }
 
@@ -161,6 +162,7 @@ header {
     padding: 10px 15px;
     border: #e83f00 solid 2px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .playAgain:hover, .startButton:hover {
