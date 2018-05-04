@@ -64,16 +64,26 @@ var questions = [
         image: "assets/images/alpacas.jpg"
     }]
 
+
+var questionCounter = 0;
+var choiceHolder = 0;    
+var timerCount = 20;
+var interval;
+var isRunning = false;
+var corAnswer = 0;
+var incorAnswer = 0;
+var noAnswer = 0; 
+
+
 // ###############################################
 //      TIMER FUNCTIONALITY
 // ###############################################
 
-var timerCount = 5;
-var interval;
-var isRunning = false; 
 
-$("#stop").on("click", stop);
-$("#resume").on("click", run);
+
+// $("#stop").on("click", stop);
+// $("#resume").on("click", run);
+
 
 function run() {
     if (!isRunning && (timerCount > 0)) {
@@ -88,7 +98,6 @@ function decrement() {
     $("#timer").text(timerCount);
     if (timerCount === 0) {
         stop();
-        // console.log(questionCounter);
         timesUpDisplay(questionCounter);
     }
 }
@@ -100,14 +109,9 @@ function stop() {
     }
 }
 
-
-// run();
-
 // ###############################################
 //      DISPLAY QUESTIONS
 // ###############################################
-var questionCounter = 0;
-var choiceHolder = 0;
 
 function displayQuestion (questionCounter) {
     $("#questionsContainer").empty();
@@ -136,11 +140,11 @@ $(document).on("click", ".choices", function() {
     if (choiceValue === questions[questionCounter].answer) {        
             stop();
             correctDisplay(choiceValue);
-      
+            // questionCounter++;
     } else {
             stop();
             incorrectDisplay(choiceValue);
-
+            // questionCounter++;
     }
 
     // ###############################################
@@ -148,7 +152,6 @@ $(document).on("click", ".choices", function() {
     // ###############################################
 
     function correctDisplay(choiceValue){
-        // console.log(questionCounter);
         $("#choicesContainer").empty();
         var image = $("<img>");
         image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
@@ -163,7 +166,12 @@ $(document).on("click", ".choices", function() {
         goodJob.attr("src", "assets/images/goodjob.png").attr("class", "img-fluid goodJob");
         $(".jumbotron").append(goodJob);
         questionCounter++;
-        nextQuestion(questionCounter);
+        corAnswer++;
+        if (questionCounter === questions.length) {
+            setTimeout(finishedDisplay, 3000);
+        } else { 
+            nextQuestion(questionCounter);
+        }
     }
 
     // ###############################################
@@ -171,7 +179,6 @@ $(document).on("click", ".choices", function() {
     // ###############################################
 
     function incorrectDisplay(choiceValue){
-        // console.log(questionCounter);
         $("#choicesContainer").empty();
         var image = $("<img>");
         image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
@@ -186,63 +193,68 @@ $(document).on("click", ".choices", function() {
         xout.attr("src", "assets/images/xout.png").attr("class", "img-fluid xout");
         $(".jumbotron").append(xout);
         questionCounter++;
-        nextQuestion(questionCounter);
+        incorAnswer++
+        if (questionCounter === questions.length) {
+            setTimeout(finishedDisplay, 3000);
+        } else { 
+            nextQuestion(questionCounter);
+        }
     }
 });
 
 function nextQuestion(questionCounter) {
-    // console.log(questionCounter);
-    if (questionCounter === questions.length - 1) {
-        finishedDisplay();
-    } else { setTimeout(function(){
-        timerCount = 5;
-        console.log("In Here");
-        $("#timer").text(5);
+
+        setTimeout(function(){
+        timerCount = 20;
+        $("#timer").text(20);
         $(".goodJob").remove();
         $(".xout").remove();
         $(".timesUp").remove();
-        console.log(questionCounter);
-        questionCounter++;
         displayQuestion(questionCounter);
     }, 3000);
-  }
 }
 
 // ###############################################
 //      TIMES UP DISPLAY
 // ###############################################
 
-function timesUpDisplay(questionCounter){
-
-    console.log(questionCounter);
-    nextQuestion(questionCounter);
-    
+function timesUpDisplay(chicken){   
     //CLEAR CONTAINERS
-    $("#questionsContainer").text(questions[questionCounter].question);
+    $("#questionsContainer").text(questions[chicken].question);
     $("#choicesContainer").empty();
 
     //TIMES UP IMAGE AND REVEALED ANSWER
     var image = $("<img>");
-    image.attr("src", questions[questionCounter].image).attr("class", "img-fluid corrincorrect");
+    image.attr("src", questions[chicken].image).attr("class", "img-fluid corrincorrect");
     var timesUpReveal = $("<div>");
-    timesUpReveal.attr("class", "timesUpReveal").text("The correct answer was: " + questions[questionCounter].choices[questions[questionCounter].answer]);
+    timesUpReveal.attr("class", "timesUpReveal").text("The correct answer was: " + questions[chicken].choices[questions[chicken].answer]);
     $("#choicesContainer").append(image, timesUpReveal);
 
     //TIMES UP STICKER
     var timesUp = $("<img>");
     timesUp.attr("src", "assets/images/timesup.png").attr("class", "img-fluid timesUp");
     $(".jumbotron").append(timesUp);
-}
 
-// timesUpDisplay(choiceHolder);
+    noAnswer++;
+    questionCounter++;
+    if (questionCounter === questions.length) {
+        setTimeout(finishedDisplay, 3000);
+    } else { 
+        nextQuestion(questionCounter);
+    }
+}
 
 // ###############################################
 //      FINISHED DISPLAY
 // ###############################################
 
-function finishedDisplay(choiceValue){
+function finishedDisplay(){
     //CLEAR CONTAINERS
+    $("#questionsContainer").empty();
     $("#choicesContainer").empty();
+    $(".goodJob").remove();
+    $(".xout").remove();
+    $(".timesUp").remove();
 
     //RESULTS HEADER
     var resultMessage = $("<div>");
@@ -252,19 +264,19 @@ function finishedDisplay(choiceValue){
 
     //RESULTS CONTAINER & PLAY AGAIN BUTTON
     var results = $("<div>");
-    results.attr("src", questions[questionCounter].results).attr("class", "mx-auto results");
+    results.attr("class", "mx-auto results");
     var playAgain = $("<div>");
     playAgain.attr("class", "mx-auto playAgain").text("Play Again?");
     $("#choicesContainer").append(results, playAgain);
 
     //RESULTS STATS
-    var cAResults = $("<div>");
-    cAResults.attr("class", "mx-auto cAResults results-stats").text("Correct Answered: 0");
-    var iAResults = $("<div>");
-    iAResults.attr("class", "mx-auto iAResults results-stats").text("Incorrect Answers: 0");
-    var uAResults = $("<div>");
-    uAResults.attr("class", "mx-auto uAResults results-stats").text("Unanswered: 0");
-    $(results).append(cAResults,iAResults,uAResults);
+    var corAnResults = $("<div>");
+    corAnResults.attr("class", "mx-auto corAnResults results-stats").text("Correct Answered: " + corAnswer);
+    var incorAnResults = $("<div>");
+    incorAnResults.attr("class", "mx-auto incorAnResults results-stats").text("Incorrect Answers: " + incorAnswer);
+    var noAnResults = $("<div>");
+    noAnResults.attr("class", "mx-auto noAnResults results-stats").text("Unanswered: " + noAnswer);
+    $(results).append(corAnResults,incorAnResults,noAnResults);
 
     //CONFETTI OVERLAY
     var confetti = $("<img>");
@@ -272,14 +284,16 @@ function finishedDisplay(choiceValue){
     $(".jumbotron").append(confetti);
 }
 
-// finishedDisplay(choiceHolder);
+$(document).on("click", ".playAgain", function(){
+    reset();
+});
 
 // ###############################################
 //      START DISPLAY
 // ###############################################
 
 function startDisplay(){
-    $("#timer").text(5);
+    $("#timer").text(20);
 
     //CLEAR CONTAINERS
     $("#choicesContainer").empty();
@@ -299,3 +313,20 @@ $(document).on("click", ".startButton", function(){
     $(".timer-div").removeClass("isHidden");
 })
 
+// ###############################################
+//      RESET
+// ###############################################
+
+function reset() {
+    $("#questionsContainer").empty();
+    $("#choicesContainer").empty();
+    $(".confetti").remove();
+    questionCounter = 0;
+    choiceHolder = 0;    
+    timerCount = 20;
+
+    corAnswer = 0;
+    incorAnswer = 0;
+    noAnswer = 0;
+    displayQuestion(questionCounter);
+}
