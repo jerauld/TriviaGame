@@ -143,7 +143,7 @@ header {
 .results, .startImage {
     margin-top: 10px;
     margin-bottom: 20px;
-    max-height: 291px;
+    height: 291px;
     /* max-width: 452px; */
     border: #084667 solid 5px;
 }
