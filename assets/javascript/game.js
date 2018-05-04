@@ -65,7 +65,7 @@ var questions = [
 
 var questionCounter = 0;
 var choiceHolder = 0;    
-var timerCount = 20;
+var timerCount = 2;
 var interval;
 var isRunning = false;
 var corAnswer = 0;
@@ -114,7 +114,6 @@ function displayQuestion (questionCounter) {
 }
 
 function nextQuestion(questionCounter) {
-
     setTimeout(function(){
     timerCount = 20;
     $("#timer").text(20);
@@ -193,7 +192,6 @@ function nextQuestion(questionCounter) {
 // Time's Up Display
 
 function timesUpDisplay(chicken){   
-
     $("#questionsContainer").text(questions[chicken].question);
     $("#choicesContainer").empty();
     var image = $("<img>");
