@@ -65,7 +65,7 @@ var questions = [
 
 var questionCounter = 0;
 var choiceHolder = 0;    
-var timerCount = 2;
+var timerCount = 20;
 var interval;
 var isRunning = false;
 var corAnswer = 0;
