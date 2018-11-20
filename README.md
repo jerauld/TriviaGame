@@ -3,6 +3,10 @@
 ## Overview
 5th Grade Trivia was created for the Trivia Game homework assignment for Berkeley Coding Bootcamp using JavaScript for the logic and jQuery to manipulate HTML.
 
+## Demo (via GitHub Pages)
+
+https://julienshim.github.io/TriviaGame/
+
 ## Requirements
 
 - Create a trivia game that shows only one question until the player answers it or   their time runs out.
