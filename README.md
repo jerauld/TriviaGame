@@ -1,4 +1,4 @@
-# TriviaGame
+# Trivia Game
 
 ## Overview
 5th Grade Trivia was created for the Trivia Game homework assignment for Berkeley Coding Bootcamp using JavaScript for the logic and jQuery to manipulate HTML.
