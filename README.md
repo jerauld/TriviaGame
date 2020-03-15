@@ -5,7 +5,7 @@
 
 ## Demo (via GitHub Pages)
 
-https://julienshim.github.io/TriviaGame/
+https://julienshim.github.io/trivia-game/
 
 ## Requirements
 
